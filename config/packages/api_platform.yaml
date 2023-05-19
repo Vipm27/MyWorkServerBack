@@ -1,0 +1,23 @@
+api_platform:
+    title: 'My Superhero API '
+    description: 'API to deal with superheroes'
+    version: '1.0.0'
+    mapping:
+        paths: ['%kernel.project_dir%/src/Entity']
+    formats:
+        json: ['application/json']
+        jsonld: ['application/ld+json']
+        html: ['text/html']
+        multipart: ['multipart/form-data']
+    patch_formats:
+        json: ['application/merge-patch+json']
+    swagger:
+        versions: [3]
+    allow_plain_identifiers: true
+
+    defaults:
+        pagination_client_items_per_page: true
+        pagination_items_per_page: 5
+    collection:
+        pagination:
+            items_per_page_parameter_name: itemsPerPage

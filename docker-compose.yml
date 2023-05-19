@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  web-server:
+    image: nginx:stable-alpine
+    ports:
+      - ${PORT}:80
+    volumes:
+      - ./:/var/www/rest-api
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php
+      - db
+
+  php:
+    build: .
+    environment:
+      APP_ENV: ${APP_ENV}
+      APP_SECRET: ${APP_SECRET}
+      DATABASE_URL: "mysql://${SQL_USER}:${SQL_PASS}@db:3306/${SQL_DATABASE_NAME}?serverVersion=8&charset=utf8mb4"
+    volumes:
+      - ./:/var/www/rest-api
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    ports:
+      - ${DB_PORT}:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: a0f7s98d
+      MYSQL_DATABASE: ${SQL_DATABASE_NAME}
+      MYSQL_USER: ${SQL_USER}
+      MYSQL_PASSWORD: ${SQL_PASS}
+    volumes:
+      - ./sql:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password
